@@ -1,12 +1,24 @@
 package guru.springframework.sfgpetclinic.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "pets")
 public class Pet extends BaseEntity{
 
+    @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "pet_type_id")
     private PetType petType;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id") //there will be an owner_id field in the pets table
     private Owner owner;
+
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     public String getName() {
