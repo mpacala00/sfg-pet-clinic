@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface OwnerRepository extends CrudRepository<Owner, Long> {
 
     //an example of a query method:
-    //Owner findByLastName(String lastName);
+    Owner findByLastName(String lastName);
 }
