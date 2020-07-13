@@ -1,13 +1,10 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.*;
-import guru.springframework.sfgpetclinic.services.PetTypeService;
-import guru.springframework.sfgpetclinic.services.SpecialtyService;
-import guru.springframework.sfgpetclinic.services.VetService;
+import guru.springframework.sfgpetclinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import guru.springframework.sfgpetclinic.services.OwnerService;
 
 import java.time.LocalDate;
 
@@ -15,18 +12,21 @@ import java.time.LocalDate;
 @Component //becomes a spring bean because of this annotation and is put into the context on startup
 public class DataLoader implements CommandLineRunner {
 
+    //referencing interfaces here will allow spring to inject proper service based on active profiles
     private final OwnerService ownerService;
     private final VetService vetService;
     private final PetTypeService petTypeService; //option+enter -> add constructor param.
     private final SpecialtyService specialtyService; //when adding new service
+    private final VisitService visitService;
 
     @Autowired
     public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService,
-                      SpecialtyService specialtyService) {
+                      SpecialtyService specialtyService, VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialtyService = specialtyService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -93,6 +93,13 @@ public class DataLoader implements CommandLineRunner {
 
         owner2.getPets().add(bevanPet);
         ownerService.save(owner2);
+
+        Visit catVisit = new Visit();
+        catVisit.setPet(bevanPet);
+        catVisit.setDate(LocalDate.now());
+        catVisit.setDescription("Kitty visit");
+
+        visitService.save(catVisit);
 
         System.out.println("Owners loaded");
 
