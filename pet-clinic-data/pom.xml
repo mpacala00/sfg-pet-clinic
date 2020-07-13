@@ -33,6 +33,7 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <!-- Preferences -> Build, Execution, Deployment -> Compiler -> Annotation Processing -> Enable -->
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
