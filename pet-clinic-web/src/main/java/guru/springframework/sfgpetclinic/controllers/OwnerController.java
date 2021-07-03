@@ -3,8 +3,11 @@ package guru.springframework.sfgpetclinic.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import guru.springframework.sfgpetclinic.services.OwnerService;
+import org.springframework.web.servlet.ModelAndView;
 
 //only accessible directory is /owners
 @RequestMapping("/owners")
@@ -31,5 +34,12 @@ public class OwnerController {
     @RequestMapping("/find")
     public String findOwners() {
         return "notImplemented.html";
+    }
+
+    @GetMapping("/{ownerId}")
+    public ModelAndView showOnwer(@PathVariable Long ownerId) {
+        ModelAndView mav = new ModelAndView("owners/ownerDetails");
+        mav.addObject(ownerService.findById(ownerId));
+        return mav;
     }
 }

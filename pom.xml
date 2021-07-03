@@ -20,7 +20,7 @@
 	<artifactId>sfg-pet-clinic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sfg-pet-clinic</name>
-	<description>SFG guru.springframework.sfgpetclinic.model.Pet Clinic Project</description>
+	<description>Spring Framework Guru Pet Clinic Project</description>
 
 	<properties>
 		<java.version>11</java.version>
