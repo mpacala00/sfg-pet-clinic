@@ -6,13 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 //only accessible directory is /owners
@@ -21,6 +19,8 @@ import java.util.List;
 public class OwnerController {
 
     private final OwnerService ownerService;
+
+    public static final String OWNER_FORM_TEMPLATE = "owners/createOrUpdateOwnerForm";
 
     @Autowired
     public OwnerController(OwnerService ownerService) {
@@ -33,15 +33,6 @@ public class OwnerController {
         //dont allow web forms to address id property
         dataBinder.setDisallowedFields("id");
     }
-
-//    @GetMapping({"", "/", "/index.html", "/index"})
-//    public String listOwners(Model model) {
-//
-//        //set to iterate over and get all of the owners
-//        model.addAttribute("owners", ownerService.findAll());
-//
-//        return "owners/index";
-//    }
 
     @GetMapping("/find")
     public String findOwners(Model model) {
@@ -81,4 +72,44 @@ public class OwnerController {
         mav.addObject(ownerService.findById(ownerId));
         return mav;
     }
+
+    @GetMapping("/new")
+    public String initCreationForm(Model model) {
+        Owner owner = new Owner();
+        model.addAttribute("owner", owner);
+        return OWNER_FORM_TEMPLATE;
+    }
+
+    //binding result holds result of the form validation and binding
+    @PostMapping("/new")
+    public String processCreationForm(@Valid Owner owner, BindingResult result) {
+        if(result.hasErrors()) {
+            return OWNER_FORM_TEMPLATE;
+        } else {
+            ownerService.save(owner);
+            return "redirect:/owners/" + owner.getId();
+        }
+    }
+
+    @GetMapping("/{ownerId}/edit")
+    public String initUpdateOwnerForm(@PathVariable("ownerId") Long ownerId, Model model) {
+        Owner owner = ownerService.findById(ownerId);
+        model.addAttribute("owner", owner);
+        return OWNER_FORM_TEMPLATE;
+    }
+
+    @PostMapping("/{ownerId}/edit")
+    //no need to declare PathVariable's name as long as variable name is the same
+    public String processUpdateOwnerForm(@PathVariable Long ownerId,
+                                        @Valid Owner owner, BindingResult result) {
+        if(result.hasErrors()) {
+            return OWNER_FORM_TEMPLATE;
+        } else {
+            owner.setId(ownerId);
+            ownerService.save(owner);
+            return "redirect:/owners/"+ownerId;
+        }
+    }
+
+
 }

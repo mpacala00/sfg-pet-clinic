@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass //means that its the base class for JPA that other classes will be inheriting from
-//but we don't need this specific class put into database
+//but we don't need this specific class put into the database
 public class BaseEntity implements Serializable {
 
     //Hibernate recommends using Long instead of long
@@ -24,4 +24,8 @@ public class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    public boolean isNew() {
+        return this.id == null;
+    }
 }
