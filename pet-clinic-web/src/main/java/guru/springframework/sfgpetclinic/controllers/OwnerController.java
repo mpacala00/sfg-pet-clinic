@@ -56,7 +56,9 @@ public class OwnerController {
             owner.setLastName("");
         }
 
-        List<Owner> results = ownerService.findAllByLastNameLike(owner.getLastName());
+        //percentages for enabling like-searching
+        //in SQL it works as wildcard character
+        List<Owner> results = ownerService.findAllByLastNameLike("%"+owner.getLastName()+"%");
 
         if(results.isEmpty()) {
             result.rejectValue("lastName", "notFound", "not found");
@@ -69,7 +71,7 @@ public class OwnerController {
         } else {
             //multiple owners found
             model.addAttribute("selections", results);
-            return "owners/ownerList";
+            return "owners/ownersList";
         }
     }
 
