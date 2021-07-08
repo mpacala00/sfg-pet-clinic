@@ -71,6 +71,7 @@ public class PetController {
             model.addAttribute("pet", pet);
             return PET_CREATE_UPDATE_FORM;
         } else {
+            pet.setOwner(owner);
             petService.save(pet);
             return "redirect:/owners/" + owner.getId();
         }
